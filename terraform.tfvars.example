@@ -1,0 +1,17 @@
+# NOTE: Cloud credentials should be set in environment variables.
+#       https://www.terraform.io/docs/providers/aws/index.html#environment-variables
+
+# These variables should be set, at minimum. See `variables.tf` for others.
+
+owner = "<YOUR-IAM-USERNAME>"
+region = "us-west-2"
+workstations = "10"
+namespace = "vault-training"
+public_key = "ssh-rsa AAAA..."
+training_username = "auser"
+training_password = "correct-horse-battery-syrup"
+
+#---------------------------------------------------
+# To specify a version different from the default
+#---------------------------------------------------
+# vault_url = "https://releases.hashicorp.com/vault/0.10.4/vault_0.10.4_linux_amd64.zip"

@@ -1,0 +1,17 @@
+{
+    "service": {
+      "name": "angularjs",
+      "port": 3000,
+      "connect": {
+        "proxy": {
+          "config": {
+            "upstreams": [{
+               "destination_name": "nodejs",
+               "local_bind_address": "0.0.0.0",
+               "local_bind_port": 5000
+            }]
+          }
+        }
+      }
+    }
+  }

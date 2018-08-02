@@ -1,0 +1,16 @@
+{
+    "service":{
+        "name": "nodejs",
+        "port": 5000,
+        "connect": {
+            "proxy": {
+              "config": {
+                "upstreams": [{
+                   "destination_name": "mongodb",
+                   "local_bind_port":  27017
+                }]
+              }
+            }
+          }
+    }
+}
