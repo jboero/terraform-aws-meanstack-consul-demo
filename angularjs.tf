@@ -50,7 +50,7 @@ data "template_file" "angularjs" {
     file("${path.module}/templates/angularjs/tools.sh"),
     file("${path.module}/templates/angularjs/nomad.sh"),
     file("${path.module}/templates/angularjs/webterminal.sh"),
-    file("${path.module}/templates/shared/connectdemo.sh"),
+    file("${path.module}/templates/angularjs/connectdemo.sh"),
     file("${path.module}/templates/shared/cleanup.sh"),
   ))}"
 

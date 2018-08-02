@@ -50,8 +50,7 @@ data "template_file" "mongodb" {
     file("${path.module}/templates/mongodb/tools.sh"),
     file("${path.module}/templates/mongodb/nomad.sh"),
     file("${path.module}/templates/mongodb/webterminal.sh"),
-    file("${path.module}/templates/shared/connectdemo.sh"),
-    file("${path.module}/templates/shared/cleanup.sh"),
+    file("${path.module}/templates/mongodb/connectdemo.sh"),
   ))}"
 
   vars {
