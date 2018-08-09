@@ -18,15 +18,18 @@ sudo npm install -g nodemon
 sudo npm install -g pm2
 echo "--> Done installing common npm dependencies"
 
-echo "Start the AngularJs Solution"
-echo "Git pull AngularJs demo"
+echo "-->  Start the AngularJs Solution"
+echo "-->  Git pull AngularJs demo"
  cd /home/${demo_username}
  git clone https://github.com/GuyBarros/mean_cluster
  cd /home/${demo_username}/mean_cluster
- echo "install the Nodejs package"
+ echo "--> install the Nodejs package"
  sudo npm install 
+ echo "--> Bower install"
  sudo bower install --allow-root
- sudo gulp serve
+ echo "--> Starting Gulp !!!!"
+ sudo nohup gulp serve &>/dev/null
+ echo "--> gulp started in the background !!!!"
 # sudo nodemon server.js &>/dev/null
 
 

@@ -1,7 +1,7 @@
 resource "aws_iam_user" "nodejs" {
   count = "${var.nodejsservers}"
 
-  name = "${var.namespace}-${element(var.animals, count.index)}--nodejs"
+ name = "${var.namespace}-nodejs-${count.index}"
   path = "/${var.namespace}/"
 }
 
@@ -30,7 +30,7 @@ data "template_file" "nodejs_iam_policy" {
 # they have created, and describing instance data.
 resource "aws_iam_user_policy" "nodejs" {
   count  = "${var.nodejsservers}"
-  name   = "policy-${element(aws_iam_user.nodejs.*.name, count.index)}"
+ name = "${var.namespace}-nodejs-${count.index}"
   user   = "${element(aws_iam_user.nodejs.*.name, count.index)}"
   policy = "${element(data.template_file.nodejs_iam_policy.*.rendered, count.index)}"
 }
@@ -111,7 +111,7 @@ data "template_cloudinit_config" "nodejs" {
 # IAM
 resource "aws_iam_role" "nodejs" {
   count              = "${var.nodejsservers}"
-  name               = "${element(aws_iam_user.nodejs.*.name, count.index)}-nodejs"
+ name = "${var.namespace}-nodejs-${count.index}"
   assume_role_policy = "${file("${path.module}/templates/policies/assume-role.json")}"
 }
 
@@ -124,14 +124,14 @@ resource "aws_iam_policy" "nodejs" {
 
 resource "aws_iam_policy_attachment" "nodejs" {
   count      = "${var.nodejsservers}"
-  name       = "${element(aws_iam_user.nodejs.*.name, count.index)}-nodejs"
+ name = "${var.namespace}-nodejs-${count.index}"
   roles      = ["${element(aws_iam_role.nodejs.*.name, count.index)}"]
   policy_arn = "${element(aws_iam_policy.nodejs.*.arn, count.index)}"
 }
 
 resource "aws_iam_instance_profile" "nodejs" {
   count = "${var.nodejsservers}"
-  name  = "${element(aws_iam_user.nodejs.*.name, count.index)}-nodejs"
+  name = "${var.namespace}-nodejs-${count.index}"
   role  = "${element(aws_iam_role.nodejs.*.name, count.index)}"
 }
 
@@ -147,7 +147,7 @@ resource "aws_instance" "nodejs" {
   vpc_security_group_ids = ["${aws_security_group.consuldemo.id}"]
 
   tags {
-    Name       = "${element(aws_iam_user.nodejs.*.name, count.index)}"
+    Name       = "${var.namespace}-nodejs-${count.index}"
     owner      = "${var.owner}"
     created-by = "${var.created-by}"
   }
@@ -166,10 +166,14 @@ resource "aws_instance" "nodejs" {
   }
 }
 
-output "nodejs" {
+output "nodejs server" {
   value = ["${aws_instance.nodejs.*.public_ip}"]
 }
 
-output "nodejs_webterminal_links" {
-  value = "${formatlist("http://%s/wetty", aws_instance.nodejs.*.public_ip)}"
+output "nodejs_api_rfi" {
+  value = "${formatlist("http://%s:5000/api/rfi", aws_instance.nodejs.*.public_ip)}"
+}
+
+output "nodejs_consul_ui" {
+  value = "${formatlist("http://%s:8500", aws_instance.nodejs.*.public_ip)}"
 }

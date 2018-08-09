@@ -5,5 +5,14 @@
         "connect": {
           "proxy": {}
         }
-    }
+    },
+    "checks": [
+       {
+        "id": "mongodb",
+        "name": "mongo server up and running",
+        "tcp": "localhost:27017",
+        "interval": "30s",
+        "timeout": "1s"
+      }
+    ]
 }

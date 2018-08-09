@@ -1,7 +1,7 @@
 resource "aws_iam_user" "mongodb" {
   count = "${var.mongodbservers}"
 
-  name = "${var.namespace}-${element(var.animals, count.index)}--mongodb"
+  name       = "${var.namespace}-mongodb-${count.index}"
   path = "/${var.namespace}/"
 }
 
@@ -30,7 +30,7 @@ data "template_file" "mongodb_iam_policy" {
 # they have created, and describing instance data.
 resource "aws_iam_user_policy" "mongodb" {
   count  = "${var.mongodbservers}"
-  name   = "policy-${element(aws_iam_user.mongodb.*.name, count.index)}"
+ name       = "${var.namespace}-mongodb-${count.index}"
   user   = "${element(aws_iam_user.mongodb.*.name, count.index)}"
   policy = "${element(data.template_file.mongodb_iam_policy.*.rendered, count.index)}"
 }
@@ -110,27 +110,27 @@ data "template_cloudinit_config" "mongodb" {
 # IAM
 resource "aws_iam_role" "mongodb" {
   count              = "${var.mongodbservers}"
-  name               = "${element(aws_iam_user.mongodb.*.name, count.index)}-mongodb"
+ name       = "${var.namespace}-mongodb-${count.index}"
   assume_role_policy = "${file("${path.module}/templates/policies/assume-role.json")}"
 }
 
 resource "aws_iam_policy" "mongodb" {
   count       = "${var.mongodbservers}"
-  name        = "${element(aws_iam_user.mongodb.*.name, count.index)}-mongodb"
+  name       = "${var.namespace}-mongodb-${count.index}"
   description = "Allows user ${element(aws_iam_user.mongodb.*.name, count.index)} to use their mongodb server."
   policy      = "${element(data.template_file.mongodb_iam_policy.*.rendered, count.index)}"
 }
 
 resource "aws_iam_policy_attachment" "mongodb" {
   count      = "${var.mongodbservers}"
-  name       = "${element(aws_iam_user.mongodb.*.name, count.index)}-mongodb"
+  name       = "${var.namespace}-mongodb-${count.index}"
   roles      = ["${element(aws_iam_role.mongodb.*.name, count.index)}"]
   policy_arn = "${element(aws_iam_policy.mongodb.*.arn, count.index)}"
 }
 
 resource "aws_iam_instance_profile" "mongodb" {
   count = "${var.mongodbservers}"
-  name  = "${element(aws_iam_user.mongodb.*.name, count.index)}-mongodb"
+  name       = "${var.namespace}-mongodb-${count.index}"
   role  = "${element(aws_iam_role.mongodb.*.name, count.index)}"
 }
 
@@ -146,7 +146,7 @@ resource "aws_instance" "mongodb" {
   vpc_security_group_ids = ["${aws_security_group.consuldemo.id}"]
 
   tags {
-    Name       = "${element(aws_iam_user.mongodb.*.name, count.index)}"
+    Name       = "${var.namespace}-mongodb-${count.index}"
     owner      = "${var.owner}"
     created-by = "${var.created-by}"
   }
@@ -165,10 +165,11 @@ resource "aws_instance" "mongodb" {
   }
 }
 
-output "mongodb" {
+output "mongodb server" {
   value = ["${aws_instance.mongodb.*.public_ip}"]
 }
 
-output "mongodb_webterminal_links" {
-  value = "${formatlist("http://%s/wetty", aws_instance.mongodb.*.public_ip)}"
+output "mongodb_consul_ui" {
+  value = "${formatlist("http://%s:8500/", aws_instance.mongodb.*.public_ip,)}"
 }
+

@@ -10,17 +10,17 @@ variable "servers" {
 
 variable "nodejsservers" {
   description = "The number of nodejs servers to create."
-  default     = "3"
+  default     = "1"
 }
 
 variable "angularjsservers" {
   description = "The number of angularjs servers to create."
-  default     = "3"
+  default     = "1"
 }
 
 variable "mongodbservers" {
   description = "The number of mongo db servers to create."
-  default     = "3"
+  default     = "1"
 }
 
 

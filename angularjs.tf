@@ -1,7 +1,7 @@
 resource "aws_iam_user" "angularjs" {
   count = "${var.angularjsservers}"
 
-  name = "${var.namespace}-${element(var.animals, count.index)}--angularjs"
+  name = "${var.namespace}-angularjs-${count.index}"
   path = "/${var.namespace}/"
 }
 
@@ -111,27 +111,27 @@ data "template_cloudinit_config" "angularjs" {
 # IAM
 resource "aws_iam_role" "angularjs" {
   count              = "${var.angularjsservers}"
-  name               = "${element(aws_iam_user.angularjs.*.name, count.index)}-angularjs"
+  name = "${var.namespace}-angularjs-${count.index}"
   assume_role_policy = "${file("${path.module}/templates/policies/assume-role.json")}"
 }
 
 resource "aws_iam_policy" "angularjs" {
   count       = "${var.angularjsservers}"
-  name        = "${element(aws_iam_user.angularjs.*.name, count.index)}-angularjs"
+    name = "${var.namespace}-angularjs-${count.index}"
   description = "Allows user ${element(aws_iam_user.angularjs.*.name, count.index)} to use their angularjs server."
   policy      = "${element(data.template_file.angularjs_iam_policy.*.rendered, count.index)}"
 }
 
 resource "aws_iam_policy_attachment" "angularjs" {
   count      = "${var.angularjsservers}"
-  name       = "${element(aws_iam_user.angularjs.*.name, count.index)}-angularjs"
+    name = "${var.namespace}-angularjs-${count.index}"
   roles      = ["${element(aws_iam_role.angularjs.*.name, count.index)}"]
   policy_arn = "${element(aws_iam_policy.angularjs.*.arn, count.index)}"
 }
 
 resource "aws_iam_instance_profile" "angularjs" {
   count = "${var.angularjsservers}"
-  name  = "${element(aws_iam_user.angularjs.*.name, count.index)}-angularjs"
+    name = "${var.namespace}-angularjs-${count.index}"
   role  = "${element(aws_iam_role.angularjs.*.name, count.index)}"
 }
 
@@ -147,7 +147,7 @@ resource "aws_instance" "angularjs" {
   vpc_security_group_ids = ["${aws_security_group.consuldemo.id}"]
 
   tags {
-    Name       = "${element(aws_iam_user.angularjs.*.name, count.index)}"
+    Name       = "${var.namespace}-angularjs-${count.index}"
     owner      = "${var.owner}"
     created-by = "${var.created-by}"
   }
@@ -166,10 +166,14 @@ resource "aws_instance" "angularjs" {
   }
 }
 
-output "angularjs" {
+output "angularjs server" {
   value = ["${aws_instance.angularjs.*.public_ip}"]
 }
 
-output "angularjs_webterminal_links" {
-  value = "${formatlist("http://%s/wetty", aws_instance.angularjs.*.public_ip)}"
+output "angularjs_consul ui" {
+  value = "${formatlist("http://%s:8500/", aws_instance.angularjs.*.public_ip)}"
+}
+
+output "angularjs_web_server" {
+  value = "${formatlist("http://%s:3000/", aws_instance.angularjs.*.public_ip)}"
 }

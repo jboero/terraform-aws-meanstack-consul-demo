@@ -13,7 +13,7 @@ sudo tee /etc/consul.d/config.json > /dev/null <<EOF
 {
   "advertise_addr": "$(private_ip)",
   "advertise_addr_wan": "$(public_ip)",
-  "bind_addr": "$(private_ip)",
+  "bind_addr": "0.0.0.0",
   "data_dir": "/mnt/consul",
   "disable_update_check": true,
   "encrypt": "${consul_gossip_key}",
@@ -23,8 +23,8 @@ sudo tee /etc/consul.d/config.json > /dev/null <<EOF
   "retry_join": ["provider=aws tag_key=${consul_join_tag_key} tag_value=${consul_join_tag_value}"],
 
   "addresses": {
-    "http": "127.0.0.1",
-    "https": "$(private_ip)"
+    "http": "0.0.0.0",
+    "https": "0.0.0.0"
   },
   "ports": {
     "http": 8500,
@@ -70,7 +70,16 @@ sudo tee /etc/consul.d/mongodb.json > /dev/null <<"EOF"
         "connect": {
           "proxy": {}
         }
-    }
+    },
+    "checks": [
+       {
+        "id": "mongodb",
+        "name": "mongo sever up and runnin",
+        "tcp": "localhost:27017",
+        "interval": "30s",
+        "timeout": "1s"
+      }
+    ]
 }
 EOF
 
