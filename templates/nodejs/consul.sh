@@ -51,15 +51,6 @@ alias ocnsul="consul"
 EOF
 source /etc/profile.d/consul.sh
 
-echo "--> Creating training service"
-sudo tee /etc/consul.d/training.json > /dev/null <<"EOF"
-{
-  "service": {
-    "name": "training",
-    "port": 1991
-  }
-}
-EOF
 
 echo "--> Creating Nodejs service"
 sudo tee /etc/consul.d/nodejs.json > /dev/null <<"EOF"
