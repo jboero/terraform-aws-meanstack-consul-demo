@@ -163,6 +163,16 @@ resource "aws_instance" "mongodb" {
       password = "${var.demo_password}"
     }
   }
+  
+  provisioner "file" {
+    source      = "${path.module}/templates/connectdemo/mongod-replica.conf"
+    destination = "/etc/mongod.conf"
+    
+    onnection {
+      type     = "ssh"
+      user     = "${var.demo_username}"
+      password = "${var.demo_password}"
+    }
 }
 
 output "mongodb server" {
