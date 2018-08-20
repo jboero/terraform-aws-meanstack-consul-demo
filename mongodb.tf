@@ -168,11 +168,12 @@ resource "aws_instance" "mongodb" {
     source      = "${path.module}/templates/connectdemo/mongod-replica.conf"
     destination = "/etc/mongod.conf"
     
-    onnection {
+    connection {
       type     = "ssh"
       user     = "${var.demo_username}"
       password = "${var.demo_password}"
     }
+  }
 }
 
 output "mongodb server" {
@@ -182,4 +183,3 @@ output "mongodb server" {
 output "mongodb_consul_ui" {
   value = "${formatlist("http://%s:8500/", aws_instance.mongodb.*.public_ip,)}"
 }
-
