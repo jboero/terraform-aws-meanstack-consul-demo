@@ -29,6 +29,9 @@ listener "tcp" {
   tls_cert_file = "/etc/vault.d/tls/vault.crt"
   tls_key_file  = "/etc/ssl/certs/me.key"
 }
+
+ui = true
+
 EOF
 
 echo "--> Writing profile"

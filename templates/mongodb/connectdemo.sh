@@ -12,6 +12,14 @@ sudo apt-get install -y mongodb-org
 sudo systemctl restart mongod
 echo "--> Done configuring  mongodb"
 
+echo "--> copy the conf file mongodb"
+sudo cp -f /tmp/mongod.conf /etc/mongod.conf
+sudo systemctl restart mongod
+
+echo "--> copy the mongodb is maser script"
+sudo cp -f /tmp/mongo_is_master.sh /etc/consul.d/mongo_is_master.sh
+sudo chmod +x  /etc/consul.d/mongo_is_master.sh
+
 echo "==> Consul Connect Demo Setup is Done!"
 
 

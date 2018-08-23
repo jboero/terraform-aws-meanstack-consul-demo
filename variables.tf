@@ -10,21 +10,26 @@ variable "servers" {
 
 variable "nodejsservers" {
   description = "The number of nodejs servers to create."
-  default     = "1"
+  default     = "3"
 }
 
 variable "angularjsservers" {
   description = "The number of angularjs servers to create."
-  default     = "1"
+  default     = "3"
 }
 
 variable "mongodbservers" {
   description = "The number of mongo db servers to create."
-  default     = "1"
+  default     = "3"
 }
 
 
 variable "consul_url" {
+  description = "The url to download Consul."
+  default     = "https://releases.hashicorp.com/consul/1.2.2/consul_1.2.2_linux_amd64.zip"
+}
+
+variable "consul_ent_url" {
   description = "The url to download Consul."
   default     = "https://releases.hashicorp.com/consul/1.2.2/consul_1.2.2_linux_amd64.zip"
 }
@@ -64,12 +69,22 @@ variable "nomad_url" {
   default     = "https://releases.hashicorp.com/nomad/0.8.4/nomad_0.8.4_linux_amd64.zip"
 }
 
+variable "nomad_ent_url" {
+  description = "The url to download nomad."
+  default     = "https://releases.hashicorp.com/nomad/0.8.4/nomad_0.8.4_linux_amd64.zip"
+}
+
 variable "terraform_url" {
   description = "The url to download terraform."
   default     = "https://releases.hashicorp.com/terraform/0.11.7/terraform_0.11.7_linux_amd64.zip"
 }
 
 variable "vault_url" {
+  description = "The url to download vault."
+  default     = "https://releases.hashicorp.com/vault/0.10.4/vault_0.10.4_linux_amd64.zip"
+}
+
+variable "vault_ent_url" {
   description = "The url to download vault."
   default     = "https://releases.hashicorp.com/vault/0.10.4/vault_0.10.4_linux_amd64.zip"
 }
@@ -134,133 +149,8 @@ variable "public_key" {
   description = "The contents of the SSH public key to use for connecting to the cluster."
  }
 
-variable "animals" {
-  default = [
-    "ant",
-    "badger",
-    "bat",
-    "bear",
-    "bee",
-    "beetle",
-    "bird",
-    "bison",
-    "buffalo",
-    "bulldog",
-    "butterfly",
-    "camel",
-    "cat",
-    "catfish",
-    "cheetah",
-    "chicken",
-    "chipmunk",
-    "cobra",
-    "coyote",
-    "cricket",
-    "crow",
-    "deer",
-    "dinosaur",
-    "dolphin",
-    "dove",
-    "dragonfly",
-    "duck",
-    "eagle",
-    "elephant",
-    "elk",
-    "falcon",
-    "flamingo",
-    "fox",
-    "frog",
-    "goldfish",
-    "gopher",
-    "gorilla",
-    "grasshopper",
-    "greyhound",
-    "halibut",
-    "hamster",
-    "hawk",
-    "hedgehog",
-    "heron",
-    "herring",
-    "hornet",
-    "horse",
-    "hummingbird",
-    "jaguar",
-    "jellyfish",
-    "kangaroo",
-    "koala",
-    "ladybug",
-    "leopard",
-    "lion",
-    "lizard",
-    "llama",
-    "lobster",
-    "lynx",
-    "mackerel",
-    "marlin",
-    "mockingbird",
-    "moose",
-    "mosquito",
-    "mussel",
-    "octopus",
-    "orca",
-    "ostrich",
-    "otter",
-    "owl",
-    "ox",
-    "oyster",
-    "panda",
-    "panther",
-    "parrot",
-    "peacock",
-    "pelican",
-    "penguin",
-    "pigeon",
-    "pony",
-    "poodle",
-    "porcupine",
-    "prawn",
-    "puffin",
-    "puma",
-    "python",
-    "rabbit",
-    "raccoon",
-    "raven",
-    "rooster",
-    "salamander",
-    "salmon",
-    "scallop",
-    "scorpion",
-    "seahorse",
-    "shark",
-    "sheep",
-    "snail",
-    "snake",
-    "sparrow",
-    "spider",
-    "squid",
-    "squirrel",
-    "starfish",
-    "stingray",
-    "stork",
-    "swan",
-    "swordfish",
-    "tern",
-    "terrier",
-    "tiger",
-    "toucan",
-    "trout",
-    "tuna",
-    "turkey",
-    "turtle",
-    "viper",
-    "vulture",
-    "wallaby",
-    "walrus",
-    "whale",
-    "wildcat",
-    "wolf",
-    "wombat",
-    "yak",
-    "zebra",
-  ]
+
+variable "enterprise" {
+  description = "do you want to use the enterprise version of the binaries"
+  default     =  false
 }

@@ -163,7 +163,7 @@ resource "aws_instance" "mongodb" {
       password = "${var.demo_password}"
     }
   }
-  
+  /*
   provisioner "file" {
     source      = "${path.module}/templates/connectdemo/mongod-replica.conf"
     destination = "/etc/mongod.conf"
@@ -173,7 +173,7 @@ resource "aws_instance" "mongodb" {
       user     = "${var.demo_username}"
       password = "${var.demo_password}"
     }
-  }
+  }*/
 }
 
 output "mongodb server" {
@@ -183,3 +183,17 @@ output "mongodb server" {
 output "mongodb_consul_ui" {
   value = "${formatlist("http://%s:8500/", aws_instance.mongodb.*.public_ip,)}"
 }
+
+/**
+
+rs.initiate({
+   _id : "consuldemo",
+members:   [
+    { _id: 0,  host : "10.1.1.253:27017"},
+    { _id: 1,  host : "10.1.2.208:27017"},
+    { _id: 2,  host : "10.1.1.213:27017"}
+]
+ })
+
+
+*/

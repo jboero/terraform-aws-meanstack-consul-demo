@@ -20,7 +20,6 @@ Description=Vault
 Documentation=https://www.vaultproject.io/docs/
 Requires=network-online.target
 After=network-online.target
-
 [Service]
 Environment=GOMAXPROCS=8
 Environment=VAULT_DEV_ROOT_TOKEN_ID=root
@@ -28,7 +27,6 @@ Restart=on-failure
 ExecStart=/usr/local/bin/vault server -dev
 ExecReload=/bin/kill -HUP $MAINPID
 KillSignal=SIGINT
-
 [Install]
 WantedBy=multi-user.target
 EOF
@@ -62,10 +60,8 @@ EOF
 
 sudo tee /workstation/vault/app.sh > /dev/null <<"EOF"
 #!/usr/bin/env bash
-
 cat <<EOT
 My connection info is:
-
   username: "$${DATABASE_CREDS_READONLY_USERNAME}"
   password: "$${DATABASE_CREDS_READONLY_PASSWORD}"
   database: "my-app"
@@ -80,13 +76,11 @@ Description=Vault Remote
 Documentation=https://www.vaultproject.io/docs/
 Requires=network-online.target
 After=network-online.target
-
 [Service]
 Restart=on-failure
 ExecStart=/usr/local/bin/vault server -config=/workstation/vault/config.hcl
 ExecReload=/bin/kill -HUP $MAINPID
 KillSignal=SIGINT
-
 [Install]
 WantedBy=multi-user.target
 EOF
@@ -96,7 +90,6 @@ sudo tee /workstation/vault/config.hcl > /dev/null <<"EOF"
 storage "file" {
   path = "/workstation/vault/data"
 }
-
 # Listen on a different port (8201), which will allow us to run multiple
 # Vault's simultaneously.
 listener "tcp" {
