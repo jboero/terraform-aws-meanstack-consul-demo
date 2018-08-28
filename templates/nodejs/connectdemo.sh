@@ -26,7 +26,7 @@ echo "Git pull nodejs demo"
  cd /home/${demo_username}/mean_cluster_backend
  echo "install the Nodejs package"
  npm install 
- sudo nodemon server.js &>/dev/null
+ sudo nodemon server.js --port=5000 &>/dev/null
 
  # sudo pm2 start server.js --name nodejs-backend &>/dev/null
 # pm2 start server.js &
