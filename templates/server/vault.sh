@@ -10,6 +10,8 @@ $(cat /etc/ssl/certs/me.crt)
 $(cat /usr/local/share/ca-certificates/01-me.crt)
 EOF
 
+if [ !${enterprise} ]
+then
 echo "--> Fetching"
 install_from_url "vault" "${vault_url}"
 
@@ -30,10 +32,6 @@ listener "tcp" {
   tls_key_file  = "/etc/ssl/certs/me.key"
 }
 
-seal "awskms" {
-  region = "eu-west-2"
-  kms_key_id = "${kmskey}"
-}
 
 
 ui = true
@@ -139,6 +137,93 @@ echo "--> Waiting for Vault leader"
 while ! host active.vault.service.consul &> /dev/null; do
   sleep 5
 done
+
+else
+ echo "--> !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Enterprise is set to True. Octonauts, Let's do this !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! "
+echo "--> Fetching"
+install_from_url "vault" "${vault_ent_url}"
+
+echo "--> Writing configuration"
+sudo mkdir -p /etc/vault.d
+sudo tee /etc/vault.d/config.hcl > /dev/null <<EOF
+ui = true
+
+cluster_name = "${namespace}-consuldemo"
+
+storage "consul" {
+  path = "vault/"
+}
+
+listener "tcp" {
+  address       = "0.0.0.0:8200"
+  tls_cert_file = "/etc/vault.d/tls/vault.crt"
+  tls_key_file  = "/etc/ssl/certs/me.key"
+}
+
+seal "awskms" {
+  region = "${region}"
+  kms_key_id = "${kmskey}
+}
+
+
+ui = true
+
+EOF
+
+echo "--> Writing profile"
+sudo tee /etc/profile.d/vault.sh > /dev/null <<"EOF"
+alias vualt="vault"
+export VAULT_ADDR="https://active.vault.service.consul:8200"
+EOF
+source /etc/profile.d/vault.sh
+
+echo "--> Generating systemd configuration"
+sudo tee /etc/systemd/system/vault.service > /dev/null <<"EOF"
+[Unit]
+Description=Vault
+Documentation=https://www.vaultproject.io/docs/
+Requires=network-online.target
+After=network-online.target
+
+[Service]
+Restart=on-failure
+ExecStart=/usr/local/bin/vault server -config="/etc/vault.d/config.hcl"
+ExecReload=/bin/kill -HUP $MAINPID
+KillSignal=SIGINT
+
+[Install]
+WantedBy=multi-user.target
+EOF
+sudo systemctl enable vault
+sudo systemctl start vault
+sleep 8
+
+echo "--> Initializing vault"
+consul lock tmp/vault/lock "$(cat <<"EOF"
+set -e
+sleep 2
+////////////////////////////////////////////////////////////////////////////////////////////
+export VAULT_ADDR="https://127.0.0.1:8200"
+export VAULT_SKIP_VERIFY=true
+
+if ! vault operator init -status >/dev/null; then
+  vault operator init -stored-shares=1 -recovery-shares=1 -recovery-threshold=1 -key-shares=1 -key-threshold=1 > /tmp/init
+
+
+  cat /tmp/init | tr '\n' ' ' | jq -r .keys[0] | consul kv put service/vault/unseal-key -
+  cat /tmp/init | tr '\n' ' ' | jq -r .root_token | consul kv put service/vault/root-token -
+
+  # shred /tmp/unseal-key /tmp/init
+fi
+sleep 2
+EOF
+)"
+TODO update the Cat| GREP | SED command above to save the Recovery key and the Root-Token
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+echo "--> !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Finished with the Enterprise set up !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+fi
+
 
 echo "--> Attempting to create nomad role"
 consul lock tmp/vault/create-nomad-role "$(cat <<"EOF"

@@ -81,12 +81,12 @@ variable "terraform_url" {
 
 variable "vault_url" {
   description = "The url to download vault."
-  default     = "https://releases.hashicorp.com/vault/0.10.4/vault_0.10.4_linux_amd64.zip"
+  default     = "https://releases.hashicorp.com/vault/0.11.1/vault_0.11.1_linux_amd64.zip"
 }
 
 variable "vault_ent_url" {
   description = "The url to download vault."
-  default     = "https://releases.hashicorp.com/vault/0.10.4/vault_0.10.4_linux_amd64.zip"
+  default     = "https://s3-us-west-2.amazonaws.com/hc-enterprise-binaries/vault/ent/0.11.1/vault-enterprise_0.11.1%2Bent_linux_amd64.zip"
 }
 
 variable "namespace" {
@@ -153,4 +153,14 @@ variable "public_key" {
 variable "enterprise" {
   description = "do you want to use the enterprise version of the binaries"
   default     =  false
+}
+
+variable "vaultlicense" {
+  description = "Enterprise License for Vault"
+  default     =  ""
+}
+
+variable "consullicense" {
+  description = "Enterprise License for Consul"
+  default     =  ""
 }

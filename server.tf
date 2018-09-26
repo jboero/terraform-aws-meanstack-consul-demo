@@ -14,6 +14,8 @@ data "template_file" "server" {
   ))}"
 
   vars {
+    region = "${var.region}"
+    enterprise = "${var.enterprise}"
     kmskey = "${aws_kms_key.consulDemoVaultKeys.id}"
     namespace = "${var.namespace}"
     node_name = "${var.namespace}-server-${count.index}"
@@ -40,6 +42,7 @@ data "template_file" "server" {
 
     # Vault
     vault_url        = "${var.vault_url}"
+    vault_ent_url        = "${var.vault_ent_url}"
     vault_root_token = "${random_id.vault-root-token.hex}"
     vault_servers    = "${var.servers}"
   }
