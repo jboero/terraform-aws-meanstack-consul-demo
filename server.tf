@@ -14,6 +14,7 @@ data "template_file" "server" {
   ))}"
 
   vars {
+    kmskey = "${aws_kms_key.consulDemoVaultKeys.id}"
     namespace = "${var.namespace}"
     node_name = "${var.namespace}-server-${count.index}"
     me_ca     = "${tls_self_signed_cert.root.cert_pem}"

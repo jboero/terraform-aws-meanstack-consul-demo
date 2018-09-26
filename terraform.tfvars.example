@@ -10,6 +10,12 @@ namespace = "vault-training"
 public_key = "ssh-rsa AAAA..."
 training_username = "auser"
 training_password = "correct-horse-battery-syrup"
+demo_username = "demo"
+demo_password = "demo"
+nodejsservers = 3
+angularjsservers = 3
+mongodbservers = 1
+
 
 #---------------------------------------------------
 # To specify a version different from the default

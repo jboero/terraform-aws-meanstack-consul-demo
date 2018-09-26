@@ -30,6 +30,12 @@ listener "tcp" {
   tls_key_file  = "/etc/ssl/certs/me.key"
 }
 
+seal "awskms" {
+  region = "eu-west-2"
+  kms_key_id = "${kmskey}"
+}
+
+
 ui = true
 
 EOF
