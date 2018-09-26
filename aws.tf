@@ -117,3 +117,16 @@ resource "aws_iam_instance_profile" "consul-join" {
   name = "${var.namespace}-consul-join"
   role = "${aws_iam_role.consul-join.name}"
 }
+
+resource "aws_kms_key" "consulDemoVaultKeys" {
+  description             = "KMS for the Consul Demo Vault"
+  deletion_window_in_days = 10
+
+tags {
+    Name           = "${var.namespace}"
+    owner          = "${var.owner}"
+    created-by     = "${var.created-by}"
+    sleep-at-night = "${var.sleep-at-night}"
+    TTL            = "${var.TTL}"
+  }
+}
