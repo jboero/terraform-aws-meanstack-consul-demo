@@ -2,7 +2,6 @@
 set -e
 
 echo "==> Vault (server)"
-
 # Vault expects the key to be concatenated with the CA
 sudo mkdir -p /etc/vault.d/tls/
 sudo tee /etc/vault.d/tls/vault.crt > /dev/null <<EOF
@@ -10,7 +9,9 @@ $(cat /etc/ssl/certs/me.crt)
 $(cat /usr/local/share/ca-certificates/01-me.crt)
 EOF
 
-if [ !${enterprise} ]
+echo "==> checking if we are using enterprise binaries"
+echo "==> value of enterprise is ${enterprise}"
+if  [ ${enterprise} ]
 then
 echo "--> Fetching"
 install_from_url "vault" "${vault_url}"
@@ -210,16 +211,26 @@ if ! vault operator init -status >/dev/null; then
   vault operator init -stored-shares=1 -recovery-shares=1 -recovery-threshold=1 -key-shares=1 -key-threshold=1 > /tmp/init
 
 
-  cat /tmp/init | tr '\n' ' ' | jq -r .keys[0] | consul kv put service/vault/unseal-key -
-  cat /tmp/init | tr '\n' ' ' | jq -r .root_token | consul kv put service/vault/root-token -
+  cat /tmp/out.txt | grep "Recovery Key 1" | sed 's/Recovery Key 1://' | consul kv put service/vault/unseal-key -
+   cat /tmp/out.txt | grep "Initial Root Token" | sed 's/Initial Root Token://' | consul kv put service/vault/root-token -
+  
+  # shred /tmp/init
 
-  # shred /tmp/unseal-key /tmp/init
+ cat /tmp/out.txt | grep "Initial Root Token" | sed 's/Initial Root Token://' | export VAULT_TOKEN= -
+
+
+Vault write sys/license text=${vaultlicense}
+
 fi
 sleep 2
 EOF
 )"
 TODO update the Cat| GREP | SED command above to save the Recovery key and the Root-Token
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+Vault write sys/license text=<contents_of_license_file>
+
 
 echo "--> !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Finished with the Enterprise set up !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
 fi

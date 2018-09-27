@@ -16,6 +16,7 @@ data "template_file" "server" {
   vars {
     region = "${var.region}"
     enterprise = "${var.enterprise}"
+    vaultlicense = "${var.vaultlicense}"
     kmskey = "${aws_kms_key.consulDemoVaultKeys.id}"
     namespace = "${var.namespace}"
     node_name = "${var.namespace}-server-${count.index}"
