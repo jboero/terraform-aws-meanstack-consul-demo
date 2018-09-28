@@ -11,7 +11,8 @@ EOF
 
 echo "==> checking if we are using enterprise binaries"
 echo "==> value of enterprise is ${enterprise}"
-if  [ ${enterprise} ]
+
+if [ ${enterprise} == 0 ]
 then
 echo "--> Fetching"
 install_from_url "vault" "${vault_url}"
@@ -140,7 +141,6 @@ while ! host active.vault.service.consul &> /dev/null; do
 done
 
 else
- echo "--> !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Enterprise is set to True. Octonauts, Let's do this !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! "
 echo "--> Fetching"
 install_from_url "vault" "${vault_ent_url}"
 
@@ -195,6 +195,7 @@ KillSignal=SIGINT
 [Install]
 WantedBy=multi-user.target
 EOF
+
 sudo systemctl enable vault
 sudo systemctl start vault
 sleep 8
@@ -203,7 +204,6 @@ echo "--> Initializing vault"
 consul lock tmp/vault/lock "$(cat <<"EOF"
 set -e
 sleep 2
-////////////////////////////////////////////////////////////////////////////////////////////
 export VAULT_ADDR="https://127.0.0.1:8200"
 export VAULT_SKIP_VERIFY=true
 
@@ -218,21 +218,15 @@ if ! vault operator init -status >/dev/null; then
 
  cat /tmp/out.txt | grep "Initial Root Token" | sed 's/Initial Root Token://' | export VAULT_TOKEN= -
 
-
-Vault write sys/license text=${vaultlicense}
-
 fi
 sleep 2
 EOF
 )"
-TODO update the Cat| GREP | SED command above to save the Recovery key and the Root-Token
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-Vault write sys/license text=<contents_of_license_file>
+Vault write sys/license text=${vaultlicense}
 
 
-echo "--> !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Finished with the Enterprise set up !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
 fi
 
 
