@@ -1,0 +1,4 @@
+secretfile filter=git-crypt diff=git-crypt
+*.tfvars filter=git-crypt diff=git-crypt
+
+
