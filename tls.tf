@@ -179,7 +179,6 @@ resource "tls_cert_request" "angularjs" {
   */
 }
 
-
 # Client signing request
 resource "tls_cert_request" "mongodb" {
   count           = "${var.mongodbservers}"

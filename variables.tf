@@ -23,7 +23,6 @@ variable "mongodbservers" {
   default     = "3"
 }
 
-
 variable "consul_url" {
   description = "The url to download Consul."
   default     = "https://releases.hashicorp.com/consul/1.2.2/consul_1.2.2_linux_amd64.zip"
@@ -147,20 +146,27 @@ variable "demo_password" {
 
 variable "public_key" {
   description = "The contents of the SSH public key to use for connecting to the cluster."
- }
-
+}
 
 variable "enterprise" {
   description = "do you want to use the enterprise version of the binaries"
-  default     =  false
+  default     = false
 }
 
 variable "vaultlicense" {
   description = "Enterprise License for Vault"
-  default     =  ""
+  default     = ""
 }
 
 variable "consullicense" {
   description = "Enterprise License for Consul"
-  default     =  ""
+  default     = ""
+}
+
+variable "awsaccesskey" {
+  description = "The AWS access key vault will use for auto unseal"
+}
+
+variable "awssecretkey" {
+  description = "The AWS secret key vault will use for auto unseal"
 }

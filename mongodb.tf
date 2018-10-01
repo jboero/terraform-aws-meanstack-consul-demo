@@ -1,7 +1,7 @@
 resource "aws_iam_user" "mongodb" {
   count = "${var.mongodbservers}"
 
-  name       = "${var.namespace}-mongodb-${count.index}"
+  name = "${var.namespace}-mongodb-${count.index}"
   path = "/${var.namespace}/"
 }
 
@@ -30,7 +30,7 @@ data "template_file" "mongodb_iam_policy" {
 # they have created, and describing instance data.
 resource "aws_iam_user_policy" "mongodb" {
   count  = "${var.mongodbservers}"
- name       = "${var.namespace}-mongodb-${count.index}"
+  name   = "${var.namespace}-mongodb-${count.index}"
   user   = "${element(aws_iam_user.mongodb.*.name, count.index)}"
   policy = "${element(data.template_file.mongodb_iam_policy.*.rendered, count.index)}"
 }
@@ -63,7 +63,7 @@ data "template_file" "mongodb" {
     # User
     demo_username = "${var.demo_username}"
     demo_password = "${var.demo_password}"
-    identity          = "${element(aws_iam_user.mongodb.*.name, count.index)}"
+    identity      = "${element(aws_iam_user.mongodb.*.name, count.index)}"
 
     # Consul
     consul_url            = "${var.consul_url}"
@@ -110,13 +110,13 @@ data "template_cloudinit_config" "mongodb" {
 # IAM
 resource "aws_iam_role" "mongodb" {
   count              = "${var.mongodbservers}"
- name       = "${var.namespace}-mongodb-${count.index}"
+  name               = "${var.namespace}-mongodb-${count.index}"
   assume_role_policy = "${file("${path.module}/templates/policies/assume-role.json")}"
 }
 
 resource "aws_iam_policy" "mongodb" {
   count       = "${var.mongodbservers}"
-  name       = "${var.namespace}-mongodb-${count.index}"
+  name        = "${var.namespace}-mongodb-${count.index}"
   description = "Allows user ${element(aws_iam_user.mongodb.*.name, count.index)} to use their mongodb server."
   policy      = "${element(data.template_file.mongodb_iam_policy.*.rendered, count.index)}"
 }
@@ -130,7 +130,7 @@ resource "aws_iam_policy_attachment" "mongodb" {
 
 resource "aws_iam_instance_profile" "mongodb" {
   count = "${var.mongodbservers}"
-  name       = "${var.namespace}-mongodb-${count.index}"
+  name  = "${var.namespace}-mongodb-${count.index}"
   role  = "${element(aws_iam_role.mongodb.*.name, count.index)}"
 }
 
@@ -163,6 +163,7 @@ resource "aws_instance" "mongodb" {
       password = "${var.demo_password}"
     }
   }
+
   /*
   provisioner "file" {
     source      = "${path.module}/templates/connectdemo/mongod-replica.conf"
@@ -197,3 +198,4 @@ members:   [
 
 
 */
+

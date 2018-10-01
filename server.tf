@@ -14,15 +14,17 @@ data "template_file" "server" {
   ))}"
 
   vars {
-    region = "${var.region}"
-    enterprise = "${var.enterprise}"
+    awsaccesskey = "${var.awsaccesskey}"
+    awssecretkey = "${var.awssecretkey}"
+    region       = "${var.region}"
+    enterprise   = "${var.enterprise}"
     vaultlicense = "${var.vaultlicense}"
-    kmskey = "${aws_kms_key.consulDemoVaultKeys.id}"
-    namespace = "${var.namespace}"
-    node_name = "${var.namespace}-server-${count.index}"
-    me_ca     = "${tls_self_signed_cert.root.cert_pem}"
-    me_cert   = "${element(tls_locally_signed_cert.server.*.cert_pem, count.index)}"
-    me_key    = "${element(tls_private_key.server.*.private_key_pem, count.index)}"
+    kmskey       = "${aws_kms_key.consulDemoVaultKeys.id}"
+    namespace    = "${var.namespace}"
+    node_name    = "${var.namespace}-server-${count.index}"
+    me_ca        = "${tls_self_signed_cert.root.cert_pem}"
+    me_cert      = "${element(tls_locally_signed_cert.server.*.cert_pem, count.index)}"
+    me_key       = "${element(tls_private_key.server.*.private_key_pem, count.index)}"
 
     # Consul
     consul_url            = "${var.consul_url}"
@@ -43,7 +45,7 @@ data "template_file" "server" {
 
     # Vault
     vault_url        = "${var.vault_url}"
-    vault_ent_url        = "${var.vault_ent_url}"
+    vault_ent_url    = "${var.vault_ent_url}"
     vault_root_token = "${random_id.vault-root-token.hex}"
     vault_servers    = "${var.servers}"
   }

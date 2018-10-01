@@ -4,7 +4,7 @@ terraform {
 
 provider "aws" {
   version = ">= 1.20.0"
-  region = "${var.region}"
+  region  = "${var.region}"
 }
 
 data "aws_ami" "ubuntu" {
@@ -122,7 +122,7 @@ resource "aws_kms_key" "consulDemoVaultKeys" {
   description             = "KMS for the Consul Demo Vault"
   deletion_window_in_days = 10
 
-tags {
+  tags {
     Name           = "${var.namespace}"
     owner          = "${var.owner}"
     created-by     = "${var.created-by}"

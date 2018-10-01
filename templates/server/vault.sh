@@ -20,7 +20,7 @@ install_from_url "vault" "${vault_url}"
 echo "--> Writing configuration"
 sudo mkdir -p /etc/vault.d
 sudo tee /etc/vault.d/config.hcl > /dev/null <<EOF
-ui = true
+
 
 cluster_name = "${namespace}-consuldemo"
 
@@ -147,7 +147,6 @@ install_from_url "vault" "${vault_ent_url}"
 echo "--> Writing configuration"
 sudo mkdir -p /etc/vault.d
 sudo tee /etc/vault.d/config.hcl > /dev/null <<EOF
-ui = true
 
 cluster_name = "${namespace}-consuldemo"
 
@@ -163,7 +162,9 @@ listener "tcp" {
 
 seal "awskms" {
   region = "${region}"
-  kms_key_id = "${kmskey}
+  access_key = "${awsaccesskey}"
+  secret_key = "${awssecretkey}"
+  kms_key_id = "${kmskey}"
 }
 
 
@@ -208,23 +209,30 @@ export VAULT_ADDR="https://127.0.0.1:8200"
 export VAULT_SKIP_VERIFY=true
 
 if ! vault operator init -status >/dev/null; then
-  vault operator init -stored-shares=1 -recovery-shares=1 -recovery-threshold=1 -key-shares=1 -key-threshold=1 > /tmp/init
+  vault operator init -stored-shares=1 -recovery-shares=1 -recovery-threshold=1 -key-shares=1 -key-threshold=1 > /tmp/out.txt
 
 
-  cat /tmp/out.txt | grep "Recovery Key 1" | sed 's/Recovery Key 1://' | consul kv put service/vault/unseal-key -
-   cat /tmp/out.txt | grep "Initial Root Token" | sed 's/Initial Root Token://' | consul kv put service/vault/root-token -
+  cat /tmp/out.txt | grep "Recovery Key 1" | sed 's/Recovery Key 1: //' | consul kv put service/vault/recovery-key -
+   cat /tmp/out.txt | grep "Initial Root Token" | sed 's/Initial Root Token: //' | consul kv put service/vault/root-token -
   
-  # shred /tmp/init
-
- cat /tmp/out.txt | grep "Initial Root Token" | sed 's/Initial Root Token://' | export VAULT_TOKEN= -
+export VAULT_TOKEN=$(consul kv get service/vault/root-token)
+echo "ROOT TOKEN: $VAULT_TOKEN"
+vault write sys/license text=${vaultlicense}
+sudo systemctl enable vault
+sudo systemctl restart vault
+else
+export VAULT_ADDR="https://127.0.0.1:8200"
+export VAULT_SKIP_VERIFY=true
+export VAULT_TOKEN=$(consul kv get service/vault/root-token)
+echo "ROOT TOKEN: $VAULT_TOKEN"
+sudo systemctl enable vault
+sudo systemctl restart vault
 
 fi
-sleep 2
+sleep 8
 EOF
 )"
 
-
-Vault write sys/license text=${vaultlicense}
 
 
 fi

@@ -64,7 +64,7 @@ data "template_file" "angularjs" {
     # User
     demo_username = "${var.demo_username}"
     demo_password = "${var.demo_password}"
-    identity          = "${element(aws_iam_user.angularjs.*.name, count.index)}"
+    identity      = "${element(aws_iam_user.angularjs.*.name, count.index)}"
 
     # Consul
     consul_url            = "${var.consul_url}"
@@ -111,27 +111,27 @@ data "template_cloudinit_config" "angularjs" {
 # IAM
 resource "aws_iam_role" "angularjs" {
   count              = "${var.angularjsservers}"
-  name = "${var.namespace}-angularjs-${count.index}"
+  name               = "${var.namespace}-angularjs-${count.index}"
   assume_role_policy = "${file("${path.module}/templates/policies/assume-role.json")}"
 }
 
 resource "aws_iam_policy" "angularjs" {
   count       = "${var.angularjsservers}"
-    name = "${var.namespace}-angularjs-${count.index}"
+  name        = "${var.namespace}-angularjs-${count.index}"
   description = "Allows user ${element(aws_iam_user.angularjs.*.name, count.index)} to use their angularjs server."
   policy      = "${element(data.template_file.angularjs_iam_policy.*.rendered, count.index)}"
 }
 
 resource "aws_iam_policy_attachment" "angularjs" {
   count      = "${var.angularjsservers}"
-    name = "${var.namespace}-angularjs-${count.index}"
+  name       = "${var.namespace}-angularjs-${count.index}"
   roles      = ["${element(aws_iam_role.angularjs.*.name, count.index)}"]
   policy_arn = "${element(aws_iam_policy.angularjs.*.arn, count.index)}"
 }
 
 resource "aws_iam_instance_profile" "angularjs" {
   count = "${var.angularjsservers}"
-    name = "${var.namespace}-angularjs-${count.index}"
+  name  = "${var.namespace}-angularjs-${count.index}"
   role  = "${element(aws_iam_role.angularjs.*.name, count.index)}"
 }
 
