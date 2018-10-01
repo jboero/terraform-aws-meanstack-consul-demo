@@ -68,13 +68,6 @@ sudo tee /etc/consul.d/mongodb.json > /dev/null <<"EOF"
         "tcp": "localhost:27017",
         "interval": "30s",
         "timeout": "1s"
-      },
-      {
-        "id": "mongodbismaster",
-        "name": "Mongo Repliation up and running",
-        "args": ["/etc/consul.d/mongo_is_master.sh"],
-        "interval": "30s",
-        "timeout": "1s"
       }
     ]
 }

@@ -1,7 +1,7 @@
 resource "aws_iam_user" "nodejs" {
   count = "${var.nodejsservers}"
 
- name = "${var.namespace}-nodejs-${count.index}"
+  name = "${var.namespace}-nodejs-${count.index}"
   path = "/${var.namespace}/"
 }
 
@@ -30,7 +30,7 @@ data "template_file" "nodejs_iam_policy" {
 # they have created, and describing instance data.
 resource "aws_iam_user_policy" "nodejs" {
   count  = "${var.nodejsservers}"
- name = "${var.namespace}-nodejs-${count.index}"
+  name   = "${var.namespace}-nodejs-${count.index}"
   user   = "${element(aws_iam_user.nodejs.*.name, count.index)}"
   policy = "${element(data.template_file.nodejs_iam_policy.*.rendered, count.index)}"
 }
@@ -64,7 +64,7 @@ data "template_file" "nodejs" {
     # User
     demo_username = "${var.demo_username}"
     demo_password = "${var.demo_password}"
-    identity          = "${element(aws_iam_user.nodejs.*.name, count.index)}"
+    identity      = "${element(aws_iam_user.nodejs.*.name, count.index)}"
 
     # Consul
     consul_url            = "${var.consul_url}"
@@ -111,7 +111,7 @@ data "template_cloudinit_config" "nodejs" {
 # IAM
 resource "aws_iam_role" "nodejs" {
   count              = "${var.nodejsservers}"
- name = "${var.namespace}-nodejs-${count.index}"
+  name               = "${var.namespace}-nodejs-${count.index}"
   assume_role_policy = "${file("${path.module}/templates/policies/assume-role.json")}"
 }
 
@@ -124,14 +124,14 @@ resource "aws_iam_policy" "nodejs" {
 
 resource "aws_iam_policy_attachment" "nodejs" {
   count      = "${var.nodejsservers}"
- name = "${var.namespace}-nodejs-${count.index}"
+  name       = "${var.namespace}-nodejs-${count.index}"
   roles      = ["${element(aws_iam_role.nodejs.*.name, count.index)}"]
   policy_arn = "${element(aws_iam_policy.nodejs.*.arn, count.index)}"
 }
 
 resource "aws_iam_instance_profile" "nodejs" {
   count = "${var.nodejsservers}"
-  name = "${var.namespace}-nodejs-${count.index}"
+  name  = "${var.namespace}-nodejs-${count.index}"
   role  = "${element(aws_iam_role.nodejs.*.name, count.index)}"
 }
 

@@ -7,11 +7,11 @@ rs.initiate({
 }
 
 output "zmembers: " {
-   value =  "${formatlist("{ host : \"%s:27017\" }",aws_instance.mongodb.*.private_ip,)}" 
+  value = "${formatlist("{ host : \"%s:27017\" }",aws_instance.mongodb.*.private_ip,)}"
 }
 
 output "zzendscript" {
-   value = <<README
+  value = <<README
 })
   README
 }

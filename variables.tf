@@ -23,7 +23,6 @@ variable "mongodbservers" {
   default     = "3"
 }
 
-
 variable "consul_url" {
   description = "The url to download Consul."
   default     = "https://releases.hashicorp.com/consul/1.2.2/consul_1.2.2_linux_amd64.zip"
@@ -81,12 +80,12 @@ variable "terraform_url" {
 
 variable "vault_url" {
   description = "The url to download vault."
-  default     = "https://releases.hashicorp.com/vault/0.10.4/vault_0.10.4_linux_amd64.zip"
+  default     = "https://releases.hashicorp.com/vault/0.11.1/vault_0.11.1_linux_amd64.zip"
 }
 
 variable "vault_ent_url" {
   description = "The url to download vault."
-  default     = "https://releases.hashicorp.com/vault/0.10.4/vault_0.10.4_linux_amd64.zip"
+  default     = "https://s3-us-west-2.amazonaws.com/hc-enterprise-binaries/vault/ent/0.11.1/vault-enterprise_0.11.1%2Bent_linux_amd64.zip"
 }
 
 variable "namespace" {
@@ -147,10 +146,27 @@ variable "demo_password" {
 
 variable "public_key" {
   description = "The contents of the SSH public key to use for connecting to the cluster."
- }
-
+}
 
 variable "enterprise" {
   description = "do you want to use the enterprise version of the binaries"
-  default     =  false
+  default     = false
+}
+
+variable "vaultlicense" {
+  description = "Enterprise License for Vault"
+  default     = ""
+}
+
+variable "consullicense" {
+  description = "Enterprise License for Consul"
+  default     = ""
+}
+
+variable "awsaccesskey" {
+  description = "The AWS access key vault will use for auto unseal"
+}
+
+variable "awssecretkey" {
+  description = "The AWS secret key vault will use for auto unseal"
 }
