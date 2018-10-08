@@ -53,7 +53,12 @@ output "vault_ui" {
    value = "http://${aws_alb.vault.dns_name}"
 }
 
+output "vpc_id" {
+   value = "${aws_vpc.consuldemo.id}"
+}
 
+
+/*
 output "zStartscript" {
   value = <<README
   this is a test:
@@ -71,3 +76,6 @@ output "zzendscript" {
 })
   README
 }
+*/
+
+
