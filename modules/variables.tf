@@ -25,12 +25,12 @@ variable "mongodbservers" {
 
 variable "consul_url" {
   description = "The url to download Consul."
-  default     = "https://releases.hashicorp.com/consul/1.2.2/consul_1.2.2_linux_amd64.zip"
+  default     = "https://releases.hashicorp.com/consul/1.2.3/consul_1.2.3_linux_amd64.zip"
 }
 
 variable "consul_ent_url" {
   description = "The url to download Consul."
-  default     = "https://releases.hashicorp.com/consul/1.2.2/consul_1.2.2_linux_amd64.zip"
+  default     = "https://s3-us-west-2.amazonaws.com/hc-enterprise-binaries/consul/ent/1.2.3/consul-enterprise_1.2.3%2Bent_linux_amd64.zip"
 }
 
 variable "packer_url" {

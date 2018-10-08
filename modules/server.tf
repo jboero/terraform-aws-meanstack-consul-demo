@@ -19,6 +19,7 @@ data "template_file" "server" {
     region       = "${var.region}"
     enterprise   = "${var.enterprise}"
     vaultlicense = "${var.vaultlicense}"
+    consullicense = "${var.consullicense}"
     kmskey       = "${aws_kms_key.consulDemoVaultKeys.id}"
     namespace    = "${var.namespace}"
     node_name    = "${var.namespace}-server-${count.index}"
@@ -28,6 +29,7 @@ data "template_file" "server" {
 
     # Consul
     consul_url            = "${var.consul_url}"
+    consul_ent_url            = "${var.consul_ent_url}"
     consul_gossip_key     = "${base64encode(random_id.consul_gossip_key.hex)}"
     consul_join_tag_key   = "ConsulJoin"
     consul_join_tag_value = "${local.consul_join_tag_value}"
