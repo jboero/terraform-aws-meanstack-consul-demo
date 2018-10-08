@@ -1,0 +1,17 @@
+module "primarycluster"{
+ source = "./modules"
+owner = "${var.owner}"
+region = "${var.region}"
+namespace = "${var.namespace}"
+public_key = "${var.public_key}"
+demo_username = "${var.demo_username}"
+demo_password = "${var.demo_password}"
+nodejsservers = "${var.nodejsservers}"
+angularjsservers = "${var.angularjsservers}"
+mongodbservers = "${var.mongodbservers}"
+vaultlicense = "${var.vaultlicense}"
+consullicense = "${var.consullicense}"
+enterprise = "${var.enterprise}"
+awsaccesskey = "${var.awsaccesskey}"
+awssecretkey = "${var.awssecretkey}"
+}

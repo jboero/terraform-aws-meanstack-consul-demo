@@ -120,6 +120,10 @@ variable "TTL" {
   default     = "240"
 }
 
+locals {
+  consul_join_tag_value = "${var.namespace}-${random_id.consul_join_tag_value.hex}"
+}
+
 variable "vpc_cidr_block" {
   description = "The top-level CIDR block for the VPC."
   default     = "10.1.0.0/16"
