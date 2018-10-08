@@ -2,9 +2,15 @@
 set -e
 
 echo "==> Consul (server)"
-
+if [ ${enterprise} == 0 ]
+then
 echo "--> Fetching"
 install_from_url "consul" "${consul_url}"
+else
+echo "--> Fetching"
+install_from_url "consul" "${consul_ent_url}"
+fi
+
 
 echo "--> Writing configuration"
 sudo mkdir -p /mnt/consul
@@ -97,6 +103,14 @@ echo "--> Waiting for Consul leader"
 while [ -z "$(curl -s http://127.0.0.1:8500/v1/status/leader)" ]; do
   sleep 3
 done
+
+if [ ${enterprise} == 1 ]
+then
+sudo consul license put "${consullicense}" > /tmp/consullicense.out
+
+
+fi
+
 
 echo "--> Registering prepared query"
 curl -so /dev/null -X POST http://127.0.0.1:8500/v1/query \
