@@ -165,15 +165,3 @@ resource "aws_instance" "nodejs" {
     }
   }
 }
-
-output "nodejs server" {
-  value = ["${aws_instance.nodejs.*.public_ip}"]
-}
-
-output "nodejs_api_rfi" {
-  value = "${formatlist("http://%s:5000/api/rfi", aws_instance.nodejs.*.public_ip)}"
-}
-
-output "nodejs_consul_ui" {
-  value = "${formatlist("http://%s:8500", aws_instance.nodejs.*.public_ip)}"
-}

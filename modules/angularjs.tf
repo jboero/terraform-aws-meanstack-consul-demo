@@ -166,14 +166,4 @@ resource "aws_instance" "angularjs" {
   }
 }
 
-output "angularjs server" {
-  value = ["${aws_instance.angularjs.*.public_ip}"]
-}
 
-output "angularjs_consul ui" {
-  value = "${formatlist("http://%s:8500/", aws_instance.angularjs.*.public_ip)}"
-}
-
-output "angularjs_web_server" {
-  value = "${formatlist("http://%s:3000/", aws_instance.angularjs.*.public_ip)}"
-}

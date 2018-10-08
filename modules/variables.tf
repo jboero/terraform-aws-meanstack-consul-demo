@@ -88,7 +88,7 @@ variable "vault_ent_url" {
   default     = "https://s3-us-west-2.amazonaws.com/hc-enterprise-binaries/vault/ent/0.11.1/vault-enterprise_0.11.1%2Bent_linux_amd64.zip"
 }
 
-variable "primarynamespace" {
+variable "namespace" {
   description = <<EOH
 The namespace to create the virtual training lab. This should describe the
 training and must be unique to all current trainings. IAM users, workstations,
@@ -98,20 +98,7 @@ It is best if you add this to your .tfvars file so you do not need to type
 it manually with each run
 EOH
 
-  default = "primaryconnectdemo"
-}
-
-variable "secondarynamespace" {
-  description = <<EOH
-The namespace to create the virtual training lab. This should describe the
-training and must be unique to all current trainings. IAM users, workstations,
-and resources will be scoped under this namespace.
-
-It is best if you add this to your .tfvars file so you do not need to type
-it manually with each run
-EOH
-
-  default = "secondaryconnectdemo"
+  default = "connectdemo"
 }
 
 variable "owner" {
@@ -133,6 +120,10 @@ variable "TTL" {
   default     = "240"
 }
 
+locals {
+  consul_join_tag_value = "${var.namespace}-${random_id.consul_join_tag_value.hex}"
+}
+
 variable "vpc_cidr_block" {
   description = "The top-level CIDR block for the VPC."
   default     = "10.1.0.0/16"
@@ -142,7 +133,6 @@ variable "cidr_blocks" {
   description = "The CIDR blocks to create the workstations in."
   default     = ["10.1.1.0/24", "10.1.2.0/24"]
 }
-
 
 variable "demo_username" {
   description = "The username to attach to the user demo login as."

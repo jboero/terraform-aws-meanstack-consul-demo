@@ -84,7 +84,3 @@ resource "aws_alb_target_group_attachment" "fabio-ui" {
   target_id        = "${element(aws_instance.nodejs.*.id, count.index)}"
   port             = "9998"
 }
-
-output "fabio-lb" {
-  value = "${aws_alb.fabio.dns_name}"
-}

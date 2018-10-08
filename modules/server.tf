@@ -88,10 +88,3 @@ resource "aws_instance" "server" {
   user_data = "${element(data.template_cloudinit_config.server.*.rendered, count.index)}"
 }
 
-output "consul_servers" {
-  value = ["${aws_instance.server.*.public_ip}"]
-}
-
-output "vault-root-token" {
-  value = "${random_id.vault-root-token.hex}"
-}

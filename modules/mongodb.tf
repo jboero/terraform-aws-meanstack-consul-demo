@@ -177,13 +177,7 @@ resource "aws_instance" "mongodb" {
   }*/
 }
 
-output "mongodb server" {
-  value = ["${aws_instance.mongodb.*.public_ip}"]
-}
 
-output "mongodb_consul_ui" {
-  value = "${formatlist("http://%s:8500/", aws_instance.mongodb.*.public_ip,)}"
-}
 
 /**
 

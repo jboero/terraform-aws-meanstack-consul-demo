@@ -49,7 +49,3 @@ resource "aws_alb_target_group_attachment" "vault" {
   target_id        = "${element(aws_instance.server.*.id, count.index)}"
   port             = "8200"
 }
-
-output "vault-lb" {
-  value = "${aws_alb.vault.dns_name}"
-}
