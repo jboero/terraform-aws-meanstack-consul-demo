@@ -56,7 +56,7 @@ sudo tee /etc/consul.d/angularjs.json > /dev/null <<"EOF"
 {
     "service": {
       "name": "angularjs",
-      "port": 3000,
+      "port": 3001,
       "connect": {
         "proxy": {
           "config": {
@@ -73,12 +73,63 @@ sudo tee /etc/consul.d/angularjs.json > /dev/null <<"EOF"
        {
         "id": "angular",
         "name": "web server up and running",
-        "tcp": "localhost:3000",
+        "tcp": "localhost:3001",
         "interval": "30s",
         "timeout": "1s"
       }
     ]
   }
+EOF
+
+echo "--> Creating Nodejs service"
+sudo tee /etc/consul.d/nodejs.json > /dev/null <<"EOF"
+{
+    "service":{
+        "name": "nodejs",
+        "port": 5000,
+        "connect": {
+            "proxy": {
+              "config": {
+                "upstreams": [{
+                   "destination_name": "mongodb",
+                   "local_bind_port":  27017
+                }]
+              }
+            }
+          }
+    },
+    "checks": [
+       {
+        "id": "nodejs",
+        "name": "nodejs api up and listening",
+        "tcp": "localhost:5000",
+        "interval": "30s",
+        "timeout": "1s"
+      }
+    ]
+}
+EOF
+
+echo "--> Creating Mongo db service"
+sudo tee /etc/consul.d/mongodb.json > /dev/null <<"EOF"
+{
+    "service":{
+        "name": "mongodb",
+        "port": 27017,
+        "connect": {
+          "proxy": {}
+        }
+    },
+    "checks": [
+       {
+        "id": "mongodb",
+        "name": "mongo sever up and runnin",
+        "tcp": "localhost:27017",
+        "interval": "30s",
+        "timeout": "1s"
+      }
+    ]
+}
 EOF
 
 

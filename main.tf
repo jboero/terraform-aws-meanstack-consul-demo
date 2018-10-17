@@ -2,27 +2,29 @@ provider "aws" {
   version = ">= 1.20.0"
   region  = "${var.region}"
 }
-module "primarycluster"{
- source = "./modules"
-owner = "${var.owner}"
-region = "${var.region}"
-namespace = "${var.primarynamespace}"
-public_key = "${var.public_key}"
-demo_username = "${var.demo_username}"
-demo_password = "${var.demo_password}"
-nodejsservers = "${var.nodejsservers}"
-angularjsservers = "${var.angularjsservers}"
-mongodbservers = "${var.mongodbservers}"
-vaultlicense = "${var.vaultlicense}"
-consullicense = "${var.consullicense}"
-enterprise = "${var.enterprise}"
-awsaccesskey = "${var.awsaccesskey}"
-awssecretkey = "${var.awssecretkey}"
-# vaultdrinstancetype = "primary"
-vpc_cidr_block = "10.1.0.0/16"
-cidr_blocks = ["10.1.1.0/24", "10.1.2.0/24"]
+
+module "primarycluster" {
+  source           = "./modules"
+  owner            = "${var.owner}"
+  region           = "${var.region}"
+  namespace        = "${var.primarynamespace}"
+  public_key       = "${var.public_key}"
+  demo_username    = "${var.demo_username}"
+  demo_password    = "${var.demo_password}"
+  servers          = "${var.servers}"
+  nomadworkers     = "${var.nomadworkers}"
+  vaultlicense     = "${var.vaultlicense}"
+  consullicense    = "${var.consullicense}"
+  enterprise       = "${var.enterprise}"
+  awsaccesskey     = "${var.awsaccesskey}"
+  awssecretkey     = "${var.awssecretkey}"
+
+  # vaultdrinstancetype = "primary"
+  vpc_cidr_block = "10.1.0.0/16"
+  cidr_blocks    = ["10.1.1.0/24", "10.1.2.0/24"]
 }
 
+/*
 module "secondarycluster"{
  source = "./modules"
 owner = "${var.owner}"
@@ -31,9 +33,7 @@ namespace = "${var.secondarynamespace}"
 public_key = "${var.public_key}"
 demo_username = "${var.demo_username}"
 demo_password = "${var.demo_password}"
-nodejsservers = "${var.nodejsservers}"
-angularjsservers = "${var.angularjsservers}"
-mongodbservers = "${var.mongodbservers}"
+nomadworkers = "${var.nomadworkers}"
 vaultlicense = "${var.vaultlicense}"
 consullicense = "${var.consullicense}"
 enterprise = "${var.enterprise}"
@@ -57,3 +57,5 @@ resource "aws_vpc_peering_connection" "vaultpeer" {
     TTL            = "${var.TTL}"
   }
 }
+*/
+

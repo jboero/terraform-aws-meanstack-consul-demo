@@ -7,19 +7,8 @@ variable "servers" {
   description = "The number of data servers (consul, nomad, etc)."
   default     = "3"
 }
-
-variable "nodejsservers" {
-  description = "The number of nodejs servers to create."
-  default     = "3"
-}
-
-variable "angularjsservers" {
-  description = "The number of angularjs servers to create."
-  default     = "3"
-}
-
-variable "mongodbservers" {
-  description = "The number of mongo db servers to create."
+variable "nomadworkers" {
+  description = "The number of nomad worker vms to create."
   default     = "3"
 }
 
@@ -142,7 +131,6 @@ variable "cidr_blocks" {
   description = "The CIDR blocks to create the workstations in."
   default     = ["10.1.1.0/24", "10.1.2.0/24"]
 }
-
 
 variable "demo_username" {
   description = "The username to attach to the user demo login as."

@@ -8,18 +8,9 @@ variable "servers" {
   default     = "3"
 }
 
-variable "nodejsservers" {
-  description = "The number of nodejs servers to create."
-  default     = "3"
-}
 
-variable "angularjsservers" {
-  description = "The number of angularjs servers to create."
-  default     = "3"
-}
-
-variable "mongodbservers" {
-  description = "The number of mongo db servers to create."
+variable "nomadworkers" {
+  description = "The number of nomad worker vms to create."
   default     = "3"
 }
 
@@ -65,12 +56,12 @@ variable "hashiui_url" {
 
 variable "nomad_url" {
   description = "The url to download nomad."
-  default     = "https://releases.hashicorp.com/nomad/0.8.4/nomad_0.8.4_linux_amd64.zip"
+  default     = "https://releases.hashicorp.com/nomad/0.8.6/nomad_0.8.6_linux_amd64.zip"
 }
 
 variable "nomad_ent_url" {
   description = "The url to download nomad."
-  default     = "https://releases.hashicorp.com/nomad/0.8.4/nomad_0.8.4_linux_amd64.zip"
+  default     = "https://releases.hashicorp.com/nomad/0.8.6/nomad_0.8.6_linux_amd64.zip"
 }
 
 variable "terraform_url" {

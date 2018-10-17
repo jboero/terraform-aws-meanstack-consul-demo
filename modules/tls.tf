@@ -99,100 +99,27 @@ resource "random_id" "vault-root-token" {
 }
 
 # Client private key
-resource "tls_private_key" "nodejs" {
-  count       = "${var.nodejsservers}"
-  algorithm   = "ECDSA"
-  ecdsa_curve = "P521"
-}
 
-resource "tls_private_key" "angularjs" {
-  count       = "${var.angularjsservers}"
-  algorithm   = "ECDSA"
-  ecdsa_curve = "P521"
-}
-
-resource "tls_private_key" "mongodb" {
-  count       = "${var.mongodbservers}"
+resource "tls_private_key" "workers" {
+  count       = "${var.nomadworkers}"
   algorithm   = "ECDSA"
   ecdsa_curve = "P521"
 }
 
 # Client signing request
-resource "tls_cert_request" "nodejs" {
-  count           = "${var.nodejsservers}"
-  key_algorithm   = "${element(tls_private_key.nodejs.*.algorithm, count.index)}"
-  private_key_pem = "${element(tls_private_key.nodejs.*.private_key_pem, count.index)}"
+resource "tls_cert_request" "workers" {
+  count           = "${var.nomadworkers}"
+  key_algorithm   = "${element(tls_private_key.workers.*.algorithm, count.index)}"
+  private_key_pem = "${element(tls_private_key.workers.*.private_key_pem, count.index)}"
 
   subject {
-    common_name  = "${element(aws_iam_user.nodejs.*.name, count.index)}.node.consul"
+    common_name  = "${element(aws_iam_user.workers.*.name, count.index)}.node.consul"
     organization = "HashiCorp Consul Connect Demo"
   }
 
   dns_names = [
     # Consul
-    "${element(aws_iam_user.nodejs.*.name, count.index)}.node.consul",
-
-    # Nomad
-    "nomad.service.consul",
-
-    "client.global.nomad",
-
-    # Common
-    "localhost",
-  ]
-
-  /*
-  ip_addresses = [
-    "127.0.0.1",
-  ]
-  */
-}
-
-# Client signing request
-resource "tls_cert_request" "angularjs" {
-  count           = "${var.angularjsservers}"
-  key_algorithm   = "${element(tls_private_key.angularjs.*.algorithm, count.index)}"
-  private_key_pem = "${element(tls_private_key.angularjs.*.private_key_pem, count.index)}"
-
-  subject {
-    common_name  = "${element(aws_iam_user.angularjs.*.name, count.index)}.node.consul"
-    organization = "HashiCorp Consul Connect Demo"
-  }
-
-  dns_names = [
-    # Consul
-    "${element(aws_iam_user.angularjs.*.name, count.index)}.node.consul",
-
-    # Nomad
-    "nomad.service.consul",
-
-    "client.global.nomad",
-
-    # Common
-    "localhost",
-  ]
-
-  /*
-  ip_addresses = [
-    "127.0.0.1",
-  ]
-  */
-}
-
-# Client signing request
-resource "tls_cert_request" "mongodb" {
-  count           = "${var.mongodbservers}"
-  key_algorithm   = "${element(tls_private_key.mongodb.*.algorithm, count.index)}"
-  private_key_pem = "${element(tls_private_key.mongodb.*.private_key_pem, count.index)}"
-
-  subject {
-    common_name  = "${element(aws_iam_user.mongodb.*.name, count.index)}.node.consul"
-    organization = "HashiCorp Consul Connect Demo"
-  }
-
-  dns_names = [
-    # Consul
-    "${element(aws_iam_user.mongodb.*.name, count.index)}.node.consul",
+    "${element(aws_iam_user.workers.*.name, count.index)}.node.consul",
 
     # Nomad
     "nomad.service.consul",
@@ -211,45 +138,10 @@ resource "tls_cert_request" "mongodb" {
 }
 
 # Client certificate
-resource "tls_locally_signed_cert" "nodejs" {
-  count              = "${var.nodejsservers}"
-  cert_request_pem   = "${element(tls_cert_request.nodejs.*.cert_request_pem, count.index)}"
-  ca_key_algorithm   = "${tls_private_key.root.algorithm}"
-  ca_private_key_pem = "${tls_private_key.root.private_key_pem}"
-  ca_cert_pem        = "${tls_self_signed_cert.root.cert_pem}"
 
-  validity_period_hours = 720 # 30 days
-
-  allowed_uses = [
-    "client_auth",
-    "digital_signature",
-    "key_agreement",
-    "key_encipherment",
-    "server_auth",
-  ]
-}
-
-resource "tls_locally_signed_cert" "angularjs" {
-  count              = "${var.angularjsservers}"
-  cert_request_pem   = "${element(tls_cert_request.angularjs.*.cert_request_pem, count.index)}"
-  ca_key_algorithm   = "${tls_private_key.root.algorithm}"
-  ca_private_key_pem = "${tls_private_key.root.private_key_pem}"
-  ca_cert_pem        = "${tls_self_signed_cert.root.cert_pem}"
-
-  validity_period_hours = 720 # 30 days
-
-  allowed_uses = [
-    "client_auth",
-    "digital_signature",
-    "key_agreement",
-    "key_encipherment",
-    "server_auth",
-  ]
-}
-
-resource "tls_locally_signed_cert" "mongodb" {
-  count              = "${var.mongodbservers}"
-  cert_request_pem   = "${element(tls_cert_request.mongodb.*.cert_request_pem, count.index)}"
+resource "tls_locally_signed_cert" "workers" {
+  count              = "${var.nomadworkers}"
+  cert_request_pem   = "${element(tls_cert_request.workers.*.cert_request_pem, count.index)}"
   ca_key_algorithm   = "${tls_private_key.root.algorithm}"
   ca_private_key_pem = "${tls_private_key.root.private_key_pem}"
   ca_cert_pem        = "${tls_self_signed_cert.root.cert_pem}"
