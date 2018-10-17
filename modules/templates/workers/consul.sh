@@ -52,34 +52,7 @@ EOF
 source /etc/profile.d/consul.sh
 
 
-echo "--> Creating Nodejs service"
-sudo tee /etc/consul.d/nodejs.json > /dev/null <<"EOF"
-{
-    "service":{
-        "name": "nodejs",
-        "port": 5000,
-        "connect": {
-            "proxy": {
-              "config": {
-                "upstreams": [{
-                   "destination_name": "mongodb",
-                   "local_bind_port":  27017
-                }]
-              }
-            }
-          }
-    },
-    "checks": [
-       {
-        "id": "nodejs",
-        "name": "nodejs api up and listening",
-        "tcp": "localhost:5000",
-        "interval": "30s",
-        "timeout": "1s"
-      }
-    ]
-}
-EOF
+
 
 
 echo "--> Making consul.d world-writable..."

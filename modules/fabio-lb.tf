@@ -72,15 +72,15 @@ resource "aws_alb_listener" "fabio-ui" {
 }
 
 resource "aws_alb_target_group_attachment" "fabio" {
-  count            = "${var.nodejsservers}"
+  count            = "${var.nomadworkers}"
   target_group_arn = "${aws_alb_target_group.fabio.arn}"
-  target_id        = "${element(aws_instance.nodejs.*.id, count.index)}"
+  target_id        = "${element(aws_instance.workers.*.id, count.index)}"
   port             = "9999"
 }
 
 resource "aws_alb_target_group_attachment" "fabio-ui" {
-  count            = "${var.nodejsservers}"
+  count            = "${var.nomadworkers}"
   target_group_arn = "${aws_alb_target_group.fabio-ui.arn}"
-  target_id        = "${element(aws_instance.nodejs.*.id, count.index)}"
+  target_id        = "${element(aws_instance.workers.*.id, count.index)}"
   port             = "9998"
 }
