@@ -169,3 +169,8 @@ variable "awsaccesskey" {
 variable "awssecretkey" {
   description = "The AWS secret key vault will use for auto unseal"
 }
+
+variable "instance_type" {
+  description = "The type(size) of data servers (consul, nomad, etc)."
+  default     = "r4.large"
+}

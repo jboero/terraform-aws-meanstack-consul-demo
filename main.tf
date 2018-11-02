@@ -36,6 +36,7 @@ module "primarycluster" {
   TTL                 = "${var.TTL}"
   vpc_cidr_block      = "${var.vpc_cidr_block}"
   cidr_blocks         = "${var.cidr_blocks}"
+  instance_type       = "${var.instance_type}"
 }
 
 /*
