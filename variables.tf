@@ -164,10 +164,12 @@ variable "consullicense" {
 
 variable "awsaccesskey" {
   description = "The AWS access key vault will use for auto unseal"
+  default = "{env.AWS_KEY_ID}"
 }
 
 variable "awssecretkey" {
   description = "The AWS secret key vault will use for auto unseal"
+  default = "{env.AWS_SECRET_KEY}"
 }
 
 variable "instance_type_server" {
