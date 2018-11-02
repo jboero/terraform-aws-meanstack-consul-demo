@@ -141,7 +141,7 @@ resource "aws_instance" "workers" {
   count = "${var.nomadworkers}"
 
   ami           = "${data.aws_ami.ubuntu.id}"
-  instance_type = "t2.medium"
+  instance_type = "${var.instance_type_worker}"
   key_name      = "${aws_key_pair.consuldemo.id}"
 
   subnet_id              = "${element(aws_subnet.consuldemo.*.id, count.index)}"

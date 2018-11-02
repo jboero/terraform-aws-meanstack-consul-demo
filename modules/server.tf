@@ -71,7 +71,7 @@ resource "aws_instance" "server" {
   count = "${var.servers}"
 
   ami           = "${data.aws_ami.ubuntu.id}"
-  instance_type = "r4.large"
+  instance_type = "${var.instance_type_server}"
   key_name      = "${aws_key_pair.consuldemo.id}"
 
   subnet_id              = "${element(aws_subnet.consuldemo.*.id, count.index)}"
