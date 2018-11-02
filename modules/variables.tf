@@ -8,7 +8,6 @@ variable "servers" {
   default     = "3"
 }
 
-
 variable "nomadworkers" {
   description = "The number of nomad worker vms to create."
   default     = "3"
