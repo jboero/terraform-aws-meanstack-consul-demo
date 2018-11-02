@@ -238,6 +238,8 @@ EOF
 fi
 
 
+
+
 echo "--> Attempting to create nomad role"
 consul lock tmp/vault/create-nomad-role "$(cat <<"EOF"
   set -e

@@ -37,6 +37,9 @@ server {
 
 client {
   enabled = true
+   options {
+    "driver.raw_exec.enable" = "1"
+  }
 }
 
 tls {
@@ -47,7 +50,7 @@ tls {
   cert_file = "/etc/ssl/certs/me.crt"
   key_file  = "/etc/ssl/certs/me.key"
 
-  verify_server_hostname = true
+  verify_server_hostname = false
 }
 
 vault {

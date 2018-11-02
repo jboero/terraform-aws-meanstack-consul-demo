@@ -38,6 +38,10 @@ echo "-->  Git pull AngularJs demo"
  sudo bower install --allow-root
 
 
+echo "-->  Git pull Nomad Jobs"
+ cd /consuldemo
+ sudo git clone https://github.com/GuyBarros/nomad_jobs
+
 echo "==> Consul Connect Demo Setup is Done!"
 
 
